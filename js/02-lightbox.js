@@ -18,8 +18,3 @@ let lightBox = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
-lightBox.on('show.simplelightbox', function () {});
-
-lightBox.on('error.simplelightbox', function (e) {
-  console.log(e); // Some usefull information
-});
