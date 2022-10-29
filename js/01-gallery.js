@@ -1,11 +1,9 @@
 import { galleryItems } from './gallery-items.js';
 // Change code below this line
 
-// console.log(galleryItems);
-
 const galleryEl = document.querySelector('.gallery');
 
-const makeImgEl = ({ preview, original, description }) =>
+const createImgEl = ({ preview, original, description }) =>
   `<div class="gallery__item">
   <a class="gallery__link" href="${original}">
     <img
@@ -17,13 +15,11 @@ const makeImgEl = ({ preview, original, description }) =>
   </a>
 </div>`;
 
-const markup = galleryItems.map(makeImgEl).join('');
+const markup = galleryItems.map(createImgEl).join('');
 
 galleryEl.insertAdjacentHTML('beforeend', markup);
 
 galleryEl.addEventListener('click', onIncreaseSizeEl);
-
-let instance = '';
 
 function onIncreaseSizeEl(event) {
   event.preventDefault();
@@ -32,18 +28,21 @@ function onIncreaseSizeEl(event) {
     return;
   }
 
-  instance = basicLightbox
-    .create(`<img src=${event.target.dataset.source} width="800" height="600">`)
-    .show();
+  const source = event.target.dataset.source;
 
-  window.addEventListener('keydown', onModalCloseToEscape);
+  openCloseModal(source);
 }
 
-function onModalCloseToEscape(evt) {
-  if (evt.code === 'Escape') {
-    const basicLightboxEl = document.querySelector('.basicLightbox');
-    basicLightboxEl.remove();
+function openCloseModal(source) {
+  const instance = basicLightbox.create(`<img width="1280" src="${source}">`);
 
-    window.removeEventListener('keydown', onModalCloseToEscape);
+  instance.show();
+  window.addEventListener('keydown', onKeyPress);
+
+  function onKeyPress(event) {
+    if (event.code === 'Escape') {
+      instance.close();
+      window.removeEventListener('keydown', onKeyPress);
+    }
   }
 }
